@@ -56,7 +56,7 @@ namespace OfferMaker.Web.Infrastructure.Extensions
                                 UserName = "Admin"
                             };
 
-                            await userManager.CreateAsync(adminUser, "panair123");
+                            await userManager.CreateAsync(adminUser, "P@nair123");
 
                             await userManager.AddToRoleAsync(adminUser, adminName);
                         }

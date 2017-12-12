@@ -11,9 +11,10 @@ namespace OfferMaker.Data.Migrations
     using System;
 
     [DbContext(typeof(OfferMakerDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171212180159_InitialAccountOpportunityProposalUserTables")]
+    partial class InitialAccountOpportunityProposalUserTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
