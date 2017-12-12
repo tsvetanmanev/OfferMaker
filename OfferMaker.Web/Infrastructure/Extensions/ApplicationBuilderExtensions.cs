@@ -43,7 +43,7 @@ namespace OfferMaker.Web.Infrastructure.Extensions
                             }
                         }
 
-                        var adminEmail = "admin@gmail.com";
+                        var adminEmail = "admin@offermaker.com";
 
                         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -53,10 +53,10 @@ namespace OfferMaker.Web.Infrastructure.Extensions
                             adminUser = new User
                             {
                                 Email = adminEmail,
-                                UserName = "Admin"
+                                UserName = adminEmail
                             };
 
-                            await userManager.CreateAsync(adminUser, "P@nair123");
+                            await userManager.CreateAsync(adminUser, "P@nair123"); //panair123
 
                             await userManager.AddToRoleAsync(adminUser, adminName);
                         }
