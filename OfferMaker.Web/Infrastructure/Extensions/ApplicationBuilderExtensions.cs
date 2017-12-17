@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using OfferMaker.Data;
-using OfferMaker.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OfferMaker.Web.Infrastructure.Extensions
+﻿namespace OfferMaker.Web.Infrastructure.Extensions
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using OfferMaker.Data;
+    using OfferMaker.Data.Models;
+    using System.Threading.Tasks;
+
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseDatabaseMigration(this IApplicationBuilder app)
@@ -53,7 +50,9 @@ namespace OfferMaker.Web.Infrastructure.Extensions
                             adminUser = new User
                             {
                                 Email = adminEmail,
-                                UserName = adminEmail
+                                UserName = adminEmail,
+                                FirstName = "Ivan",
+                                LastName = "Popov"
                             };
 
                             await userManager.CreateAsync(adminUser, "P@nair123"); //panair123

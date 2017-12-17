@@ -7,5 +7,7 @@
     public interface IAccountService
     {
         Task<IEnumerable<AccountListingServiceModel>> GetAllAsync();
+
+        Task CreateAsync(string name, string address, string description, string managerId);
     }
 }

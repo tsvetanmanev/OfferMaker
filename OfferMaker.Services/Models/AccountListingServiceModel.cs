@@ -7,6 +7,8 @@
 
     public class AccountListingServiceModel : IMapFrom<Account>, IHaveCustomMapping
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Address { get; set; }
@@ -15,9 +17,13 @@
 
         public int OpportunitiesCount { get; set; }
 
+        public string ManagerName { get; set; }
+
         public void ConfigureMapping(Profile mapper)
             => mapper
                 .CreateMap<Account, AccountListingServiceModel>()
-                .ForMember(a => a.OpportunitiesCount, cfg => cfg.MapFrom(a => a.Opportunities.Count()));
+                .ForMember(a => a.OpportunitiesCount, cfg => cfg.MapFrom(a => a.Opportunities.Count()))
+                /*.ForMember(a => a.ManagerName, cfg => cfg.MapFrom(a => a.Manager.Name))*/;
+
     }
 }
