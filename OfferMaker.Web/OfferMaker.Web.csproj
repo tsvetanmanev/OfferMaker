@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OfferMaker.Common\OfferMaker.Common.csproj" />
     <ProjectReference Include="..\OfferMaker.Data\OfferMaker.Data.csproj" />
+    <ProjectReference Include="..\OfferMaker.Services\OfferMaker.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

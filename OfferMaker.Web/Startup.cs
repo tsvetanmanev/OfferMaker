@@ -10,6 +10,7 @@
     using OfferMaker.Data.Models;
     using OfferMaker.Web.Infrastructure.Extensions;
     using AutoMapper;
+    using Microsoft.AspNetCore.Mvc;
 
     public class Startup
     {
@@ -39,7 +40,16 @@
 
             services.AddAutoMapper();
 
+            services.AddDomainServices();
+
+            services.AddRouting(routing => routing.LowercaseUrls = true);
+
             services.AddMvc();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

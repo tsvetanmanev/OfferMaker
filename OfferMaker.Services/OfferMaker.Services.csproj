@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OfferMaker.Common\OfferMaker.Common.csproj" />
+    <ProjectReference Include="..\OfferMaker.Data\OfferMaker.Data.csproj" />
+  </ItemGroup>
+
+</Project>
