@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-OfferMaker.Web-06D76AF0-3DB3-45A6-A0BD-9E39B3777431</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="NewFolder1\**" />
+    <Content Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <None Remove="NewFolder1\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
@@ -22,6 +29,18 @@
   <ItemGroup>
     <ProjectReference Include="..\OfferMaker.Common\OfferMaker.Common.csproj" />
     <ProjectReference Include="..\OfferMaker.Data\OfferMaker.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\" />
+    <Folder Include="Areas\Reports\Controllers\" />
+    <Folder Include="Areas\Reports\Data\" />
+    <Folder Include="Areas\Reports\Models\" />
+    <Folder Include="Areas\Reports\Views\" />
   </ItemGroup>
 
 </Project>

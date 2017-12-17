@@ -6,23 +6,23 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using OfferMaker.Data.Models;
-    using OfferMaker.Web.Models.AccountViewModels;
+    using OfferMaker.Web.Models.AspAccountViewModels;
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     [Authorize]
     [Route("[controller]/[action]")]
-    public class AccountController : Controller
+    public class AspAccountController : Controller
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger _logger;
 
-        public AccountController(
+        public AspAccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AspAccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
