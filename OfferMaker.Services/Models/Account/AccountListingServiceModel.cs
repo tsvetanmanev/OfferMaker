@@ -1,4 +1,4 @@
-﻿namespace OfferMaker.Services.Models
+﻿namespace OfferMaker.Services.Models.Account
 {
     using AutoMapper;
     using OfferMaker.Common.Mapping;
@@ -23,7 +23,7 @@
             => mapper
                 .CreateMap<Account, AccountListingServiceModel>()
                 .ForMember(a => a.OpportunitiesCount, cfg => cfg.MapFrom(a => a.Opportunities.Count()))
-                /*.ForMember(a => a.ManagerName, cfg => cfg.MapFrom(a => a.Manager.Name))*/;
+                .ForMember(a => a.ManagerName, cfg => cfg.MapFrom(a => a.Manager.FirstName + " " + a.Manager.LastName));
 
     }
 }

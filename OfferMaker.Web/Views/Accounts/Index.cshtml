@@ -1,10 +1,14 @@
 ﻿@model IEnumerable<AccountListingServiceModel>
 
 @{
-    ViewData["Title"] = "All Accounts";
+    ViewData["Title"] = "Accounts";
 }
 
 <h2>@ViewData["Title"]</h2>
+
+<p>
+    <a class="btn btn-default" asp-controller="Accounts" asp-action="Create">Add new</a>
+</p>
 
 <div class="row">
     @foreach (var account in Model)
@@ -21,7 +25,8 @@
                     {
                         <p class="text-center">Adrress: @account.Address</p>
                     }
-                    <p class="text-center">Account Manager: @account.Manager</p>
+                    <p class="text-center">Account Manager: @account.ManagerName</p>
+                    <p class="text-center">@account.OpportunitiesCount Sales Opportunities</p>
                 </div>
             </div>
         </div>

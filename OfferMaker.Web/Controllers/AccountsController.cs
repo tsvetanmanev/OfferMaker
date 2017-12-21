@@ -49,5 +49,12 @@
             TempData.AddSuccessMessage($"Account {accountModel.Name} created successfully!");
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await this.accounts.GetById(id);
+            return this.ViewOrNotFound(model);
+        }
     }
 }

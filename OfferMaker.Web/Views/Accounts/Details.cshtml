@@ -1,0 +1,46 @@
+﻿@model AccountDetailsServiceModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} details";
+}
+
+<h2></h2>
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading"><strong>@Model.Name</strong></div>
+    <div class="panel-body">
+        <p>@Model.Description</p>
+        <p><small>@Model.Address</small></p>
+        <p id="manage-buttons">
+            <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId=@Model.Id>Add Opportunity</a>
+            <a class="btn btn-warning">Edit</a>
+            <a class="btn btn-danger">Delete</a>
+        </p>
+    </div>
+
+    @if (Model.Oppotunities != null)
+    {
+        <!-- Table -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Created on</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var opportunity in Model.Oppotunities)
+                {
+                    <tr>
+                        <td>@opportunity.Name</td>
+                        <td>@opportunity.CreationDate</td>
+                        <td>@opportunity.Id</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

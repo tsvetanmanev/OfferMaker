@@ -4,8 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using OfferMaker.Data;
     using OfferMaker.Data.Models;
-    using OfferMaker.Services.Models;
+    using OfferMaker.Services.Models.Account;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class AccountService : IAccountService
@@ -39,5 +40,11 @@
             .ProjectTo<AccountListingServiceModel>()
             .ToListAsync();
 
+        public async Task<AccountDetailsServiceModel> GetById(int id)
+            => await this.db
+            .Accounts
+            .Where(a => a.Id == id)
+            .ProjectTo<AccountDetailsServiceModel>()
+            .FirstOrDefaultAsync();
     }
 }
