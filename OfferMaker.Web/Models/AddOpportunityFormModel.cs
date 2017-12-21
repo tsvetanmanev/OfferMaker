@@ -18,8 +18,8 @@
 
         public int AccountId { get; set; }
 
-        public IEnumerable<SelectListItem> potentialMembers { get; set; }
+        public IEnumerable<SelectListItem> PotentialMembers { get; set; }
 
-        public IEnumerable<string> opportunityMembers { get; set; }
+        public IEnumerable<string> OportunityMembers { get; set; }
     }
 }

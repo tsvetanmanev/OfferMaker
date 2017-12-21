@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using OfferMaker.Services.Models.Opportunity;
 
     public class AccountDetailsServiceModel : IMapFrom<Account>, IHaveCustomMapping
     {
@@ -18,7 +19,7 @@
 
         public string ManagerName { get; set; }
 
-        public IEnumerable<OpportunityListingServiceModel> Oppotunities { get; set; }
+        public IEnumerable<AccountsOpportunityListingServiceModel> Oppotunities { get; set; }
 
         public void ConfigureMapping(Profile mapper)
             => mapper

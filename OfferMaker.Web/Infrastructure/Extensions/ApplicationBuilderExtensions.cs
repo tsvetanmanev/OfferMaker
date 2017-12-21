@@ -27,7 +27,8 @@
                         var roles = new[]
                         {
                             adminName,
-                            WebConstants.AccountManagerRole
+                            WebConstants.AccountManagerRole,
+                            WebConstants.OpportunityMemberRole
                         };
 
                         foreach (var role in roles)

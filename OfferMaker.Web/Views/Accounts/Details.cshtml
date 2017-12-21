@@ -13,7 +13,7 @@
         <p>@Model.Description</p>
         <p><small>@Model.Address</small></p>
         <p id="manage-buttons">
-            <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId=@Model.Id>Add Opportunity</a>
+            <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Id">Add Opportunity</a>
             <a class="btn btn-warning">Edit</a>
             <a class="btn btn-danger">Delete</a>
         </p>

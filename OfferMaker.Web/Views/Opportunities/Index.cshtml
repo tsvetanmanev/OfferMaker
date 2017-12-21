@@ -1,0 +1,29 @@
+﻿@model IEnumerable<OpportunityListingServiceModel>
+
+@{
+    ViewData["Title"] = "My Opportunities";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Account</th>
+            <th>Name</th>
+            <th>Created date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var opportunity in Model)
+        {
+            <tr>
+                <td><a asp-controller="Accounts" asp-action="Details" asp-route-id="@opportunity.AccountId">@opportunity.AccountName</a></td>
+                <td>@opportunity.Name</td>
+                <td>@opportunity.CreationDate</td>
+                <td>@opportunity.Id</td>
+            </tr>
+        }
+    </tbody>
+</table>

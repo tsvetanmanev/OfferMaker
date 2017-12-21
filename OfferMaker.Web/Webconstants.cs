@@ -2,6 +2,8 @@
 {
     public class WebConstants
     {
+        public const string AdminArea = "Admin";
+
         public const string AdministratorRole = "Administrator";
         public const string AccountManagerRole = "AccountManager";
         public const string OpportunityMemberRole = "OpportunityMember";

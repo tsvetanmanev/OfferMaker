@@ -1,7 +1,10 @@
 ﻿namespace OfferMaker.Services.Implementations
 {
+    using AutoMapper.QueryableExtensions;
+    using Microsoft.EntityFrameworkCore;
     using OfferMaker.Data;
     using OfferMaker.Data.Models;
+    using OfferMaker.Services.Models.Opportunity;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -49,5 +52,13 @@
             }
 
         }
+
+        public async Task<IEnumerable<OpportunityListingServiceModel>> GetByUserIdAsync(string userId)
+            => await this.db
+                    .Opportunities
+                    .Where(o => o.Members.Any(m => m.UserId == userId))
+                    .ProjectTo<OpportunityListingServiceModel>()
+                    .ToListAsync();
+
     }
 }

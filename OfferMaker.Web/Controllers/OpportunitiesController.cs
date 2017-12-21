@@ -25,11 +25,15 @@
 
         [Authorize]
         public async Task<IActionResult> Create(int accountId)
-            => View(new AddOpportunityFormModel
+        {
+            var model = new AddOpportunityFormModel
             {
                 AccountId = accountId,
-                potentialMembers = await GetUsersInOpportunityMemberRole()
-            });
+                PotentialMembers = await GetUsersInOpportunityMemberRole()
+            };
+
+            return View(model);
+        }
 
         [Authorize]
         [HttpPost]
@@ -37,7 +41,7 @@
         {
             if (!ModelState.IsValid)
             {
-                model.potentialMembers = await GetUsersInOpportunityMemberRole();
+                model.PotentialMembers = await GetUsersInOpportunityMemberRole();
                 return View(model);
             }
 
@@ -45,11 +49,19 @@
                 model.Name,
                 model.Description,
                 model.AccountId,
-                model.opportunityMembers
+                model.OportunityMembers
                 );
 
             TempData.AddSuccessMessage($"Opportunity {model.Name} created successfully!");
             return RedirectToAction(controllerName: "Accounts", actionName: nameof(AccountsController.Details), routeValues: new { id = model.AccountId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var userId = this.userManager.GetUserId(User);
+
+            return View(await this.opportunities.GetByUserIdAsync(userId));
         }
 
         private async Task<IEnumerable<SelectListItem>> GetUsersInOpportunityMemberRole()
