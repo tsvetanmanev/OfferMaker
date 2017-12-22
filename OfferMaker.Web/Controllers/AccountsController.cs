@@ -1,10 +1,12 @@
 ﻿namespace OfferMaker.Web.Controllers
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using OfferMaker.Data.Models;
     using OfferMaker.Services;
+    using OfferMaker.Services.Models.Account;
     using OfferMaker.Web.Infrastructure.Extensions;
     using OfferMaker.Web.Models;
     using OfferMaker.Web.Models.Account;
@@ -32,7 +34,7 @@
 
         [Authorize(Roles = WebConstants.AccountManagerRole)]
         [HttpPost]
-        public async Task<IActionResult> Create(AddAccountFormModel accountModel)
+        public async Task<IActionResult> Create(AccountFormModel accountModel)
         {
             if (!ModelState.IsValid)
             {
@@ -108,6 +110,43 @@
 
             TempData.AddSuccessMessage($"Account {model.Name} deleted successfully!");
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (!await this.ValidateUserIsAssignedAccountManager(id))
+            {
+                return Unauthorized();
+            }
+
+            var serviceModel = await this.accounts.GetByIdAsync(id);
+
+            var viewModel = Mapper.Map<AccountDetailsServiceModel, AccountFormModel>(serviceModel);
+
+            return this.ViewOrNotFound(viewModel);
+        }
+
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AccountFormModel model)
+        {
+            if (!await this.ValidateUserIsAssignedAccountManager(id))
+            {
+                return Unauthorized();
+            }
+
+            var serviceModel = await this.accounts.GetByIdAsync(id);
+
+            if (serviceModel == null)
+            {
+                return BadRequest();
+            }
+
+            await this.accounts.EditAsync(id, model.Name, model.Description, model.Address);
+
+            TempData.AddSuccessMessage($"Account {model.Name} edited successfully!");
+            return RedirectToAction(nameof(Details), routeValues: new { id = id });
         }
 
         private async Task<bool> ValidateUserIsAssignedAccountManager(int accountid)

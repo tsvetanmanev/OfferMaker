@@ -16,7 +16,7 @@
         {
             <p id="manage-buttons">
                 <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Account.Id">Add Opportunity</a>
-                <a class="btn btn-primary">Edit</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Account.Id">Edit</a>
                 <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Account.Id">Delete</a>
             </p>
         }

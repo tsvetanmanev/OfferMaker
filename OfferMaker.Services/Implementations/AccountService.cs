@@ -47,6 +47,25 @@
             return true;
         }
 
+        public async Task EditAsync(int id, string name, string address, string description)
+        {
+            var account = await this.db
+                    .Accounts
+                    .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (account == null)
+            {
+                //todo: log error
+                return;
+            }
+
+            account.Name = name;
+            account.Address = address;
+            account.Description = description;
+
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<AccountListingServiceModel>> GetAllAsync()
             => await this.db
                 .Accounts

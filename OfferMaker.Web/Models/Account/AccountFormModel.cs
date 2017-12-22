@@ -1,9 +1,11 @@
 ﻿namespace OfferMaker.Web.Models.Account
 {
+    using OfferMaker.Common.Mapping;
     using OfferMaker.Data;
+    using OfferMaker.Services.Models.Account;
     using System.ComponentModel.DataAnnotations;
 
-    public class AddAccountFormModel
+    public class AccountFormModel : IMapFrom<AccountDetailsServiceModel>
     {
         [Required]
         [MinLength(DataConstants.EntityTitleMinLenght)]

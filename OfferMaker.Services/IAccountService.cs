@@ -15,5 +15,7 @@
         Task<bool> DeleteAsync(int id);
 
         Task<bool> UserIsAssignedAccountManager(string userId, int accountId);
+
+        Task EditAsync(int id, string name, string address, string description);
     }
 }
