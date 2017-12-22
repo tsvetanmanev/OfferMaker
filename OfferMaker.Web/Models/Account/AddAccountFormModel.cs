@@ -1,4 +1,4 @@
-﻿namespace OfferMaker.Web.Models
+﻿namespace OfferMaker.Web.Models.Account
 {
     using OfferMaker.Data;
     using System.ComponentModel.DataAnnotations;

@@ -13,5 +13,7 @@
         Task<AccountDetailsServiceModel> GetByIdAsync(int id);
 
         Task<bool> DeleteAsync(int id);
+
+        Task<bool> UserIsAssignedAccountManager(string userId, int accountId);
     }
 }

@@ -6,9 +6,12 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<p>
-    <a class="btn btn-default" asp-controller="Accounts" asp-action="Create">Add new</a>
-</p>
+@if (User.IsInRole(WebConstants.AccountManagerRole))
+{
+    <p>
+        <a class="btn btn-default" asp-controller="Accounts" asp-action="Create">Add new</a>
+    </p>
+}
 
 <div class="row">
     @foreach (var account in Model)

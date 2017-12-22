@@ -18,8 +18,6 @@
             this.db = db;
         }
 
-
-
         public async Task CreateAsync(string name, string address, string description, string managerId)
         {
             var account = new Account
@@ -51,15 +49,20 @@
 
         public async Task<IEnumerable<AccountListingServiceModel>> GetAllAsync()
             => await this.db
-            .Accounts
-            .ProjectTo<AccountListingServiceModel>()
-            .ToListAsync();
+                .Accounts
+                .ProjectTo<AccountListingServiceModel>()
+                .ToListAsync();
 
         public async Task<AccountDetailsServiceModel> GetByIdAsync(int id)
             => await this.db
-            .Accounts
-            .Where(a => a.Id == id)
-            .ProjectTo<AccountDetailsServiceModel>()
-            .FirstOrDefaultAsync();
+                .Accounts
+                .Where(a => a.Id == id)
+                .ProjectTo<AccountDetailsServiceModel>()
+                .FirstOrDefaultAsync();
+
+        public async Task<bool> UserIsAssignedAccountManager(string userId, int accountId)
+            => await this.db
+                .Accounts
+                .AnyAsync(a => a.Id == accountId && a.ManagerId == userId);
     }
 }

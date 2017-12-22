@@ -1,28 +1,28 @@
-﻿@model AccountDetailsServiceModel
+﻿@model AccountDetailsViewModel
 
 @{
-    ViewData["Title"] = $"{Model.Name} details";
+    ViewData["Title"] = $"{Model.Account.Name} details";
 }
 
 <h2></h2>
 
 <div class="panel panel-default">
     <!-- Default panel contents -->
-    <div class="panel-heading"><strong>@Model.Name</strong></div>
+    <div class="panel-heading"><strong>@Model.Account.Name</strong></div>
     <div class="panel-body">
-        <p>@Model.Description</p>
-        <p><small>@Model.Address</small></p>
-        @if (User.IsInRole(WebConstants.AccountManagerRole))
+        <p>@Model.Account.Description</p>
+        <p><small>@Model.Account.Address</small></p>
+        @if (User.IsInRole(WebConstants.AccountManagerRole) && Model.UserIsAssignedAccountManager)
         {
             <p id="manage-buttons">
-                <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Id">Add Opportunity</a>
+                <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Account.Id">Add Opportunity</a>
                 <a class="btn btn-primary">Edit</a>
-                <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Account.Id">Delete</a>
             </p>
         }
     </div>
 
-    @if (Model.Opportunities != null && Model.Opportunities.Count() >= 1)
+    @if (Model.Account.Opportunities != null && Model.Account.Opportunities.Count() >= 1)
     {
         <!-- Table -->
         <table class="table table-hover">
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var opportunity in Model.Opportunities)
+                @foreach (var opportunity in Model.Account.Opportunities)
                 {
                     <tr>
                         <td>@opportunity.Name</td>

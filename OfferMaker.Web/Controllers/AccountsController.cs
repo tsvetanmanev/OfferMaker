@@ -7,6 +7,7 @@
     using OfferMaker.Services;
     using OfferMaker.Web.Infrastructure.Extensions;
     using OfferMaker.Web.Models;
+    using OfferMaker.Web.Models.Account;
     using System.Threading.Tasks;
 
     public class AccountsController : Controller
@@ -53,13 +54,33 @@
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await this.accounts.GetByIdAsync(id);
-            return this.ViewOrNotFound(model);
+            var account = await this.accounts.GetByIdAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            var userId = this.userManager.GetUserId(User);
+            var userIsAssignedAccountManager = await this.accounts.UserIsAssignedAccountManager(userId, id);
+
+            var accountViewModel = new AccountDetailsViewModel
+            {
+                Account = account,
+                UserIsAssignedAccountManager = userIsAssignedAccountManager
+            };
+
+            return View(accountViewModel);
         }
 
         [Authorize(Roles = WebConstants.AccountManagerRole)]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!await this.ValidateUserIsAssignedAccountManager(id))
+            {
+                return Unauthorized();
+            }
+
             var model = await this.accounts.GetByIdAsync(id);
             return this.ViewOrNotFound(model);
         }
@@ -68,6 +89,11 @@
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!await this.ValidateUserIsAssignedAccountManager(id))
+            {
+                return Unauthorized();
+            }
+
             var model = await this.accounts.GetByIdAsync(id);
             if (model == null)
             {
@@ -75,14 +101,21 @@
             }
 
             var result = await this.accounts.DeleteAsync(id);
-
-            if (result)
+            if (!result)
             {
-                TempData.AddSuccessMessage($"Account {model.Name} deleted successfully!");
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
-            return NotFound();
+            TempData.AddSuccessMessage($"Account {model.Name} deleted successfully!");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<bool> ValidateUserIsAssignedAccountManager(int accountid)
+        {
+            var userId = this.userManager.GetUserId(User);
+            var userIsAssignedAccountManager = await this.accounts.UserIsAssignedAccountManager(userId, accountid);
+
+            return userIsAssignedAccountManager;
         }
     }
 }
