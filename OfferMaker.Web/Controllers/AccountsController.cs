@@ -25,11 +25,11 @@
             return View(await this.accounts.GetAllAsync());
         }
 
-        [Authorize]
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
         public IActionResult Create()
             => View();
 
-        [Authorize]
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
         [HttpPost]
         public async Task<IActionResult> Create(AddAccountFormModel accountModel)
         {
@@ -57,14 +57,14 @@
             return this.ViewOrNotFound(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
         public async Task<IActionResult> Delete(int id)
         {
             var model = await this.accounts.GetByIdAsync(id);
             return this.ViewOrNotFound(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

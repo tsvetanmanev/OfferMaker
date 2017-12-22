@@ -19,12 +19,12 @@
 
         public string ManagerName { get; set; }
 
-        public IEnumerable<AccountsOpportunityListingServiceModel> Oppotunities { get; set; }
+        public IEnumerable<AccountsOpportunityListingServiceModel> Opportunities { get; set; }
 
         public void ConfigureMapping(Profile mapper)
             => mapper
                 .CreateMap<Account, AccountDetailsServiceModel>()
                 .ForMember(ad => ad.ManagerName, cfg => cfg.MapFrom(a => a.Manager.FirstName + " " + a.Manager.LastName))
-                .ForMember(ad => ad.Oppotunities, cfg => cfg.MapFrom(a => a.Opportunities));
+                .ForMember(ad => ad.Opportunities, cfg => cfg.MapFrom(a => a.Opportunities));
     }
 }

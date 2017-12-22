@@ -12,26 +12,29 @@
     <div class="panel-body">
         <p>@Model.Description</p>
         <p><small>@Model.Address</small></p>
-        <p id="manage-buttons">
-            <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Id">Add Opportunity</a>
-            <a class="btn btn-primary">Edit</a>
-            <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-        </p>
+        @if (User.IsInRole(WebConstants.AccountManagerRole))
+        {
+            <p id="manage-buttons">
+                <a class="btn btn-primary" asp-controller="Opportunities" asp-action="Create" asp-route-accountId="@Model.Id">Add Opportunity</a>
+                <a class="btn btn-primary">Edit</a>
+                <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+            </p>
+        }
     </div>
 
-    @if (Model.Oppotunities != null)
+    @if (Model.Opportunities != null && Model.Opportunities.Count() >= 1)
     {
         <!-- Table -->
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Opportunity</th>
                     <th>Created on</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var opportunity in Model.Oppotunities)
+                @foreach (var opportunity in Model.Opportunities)
                 {
                     <tr>
                         <td>@opportunity.Name</td>
