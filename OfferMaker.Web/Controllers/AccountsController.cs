@@ -53,8 +53,36 @@
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await this.accounts.GetById(id);
+            var model = await this.accounts.GetByIdAsync(id);
             return this.ViewOrNotFound(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var model = await this.accounts.GetByIdAsync(id);
+            return this.ViewOrNotFound(model);
+        }
+
+        [Authorize]
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var model = await this.accounts.GetByIdAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            var result = await this.accounts.DeleteAsync(id);
+
+            if (result)
+            {
+                TempData.AddSuccessMessage($"Account {model.Name} deleted successfully!");
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
         }
     }
 }

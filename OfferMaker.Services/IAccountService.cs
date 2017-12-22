@@ -10,6 +10,8 @@
 
         Task CreateAsync(string name, string address, string description, string managerId);
 
-        Task<AccountDetailsServiceModel> GetById(int id);
+        Task<AccountDetailsServiceModel> GetByIdAsync(int id);
+
+        Task<bool> DeleteAsync(int id);
     }
 }

@@ -34,13 +34,28 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var account = await this.db.Accounts.FindAsync(id);
+
+            if (account == null)
+            {
+                return false;
+            }
+
+            this.db.Accounts.Remove(account);
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<IEnumerable<AccountListingServiceModel>> GetAllAsync()
             => await this.db
             .Accounts
             .ProjectTo<AccountListingServiceModel>()
             .ToListAsync();
 
-        public async Task<AccountDetailsServiceModel> GetById(int id)
+        public async Task<AccountDetailsServiceModel> GetByIdAsync(int id)
             => await this.db
             .Accounts
             .Where(a => a.Id == id)

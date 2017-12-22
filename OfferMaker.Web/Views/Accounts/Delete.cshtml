@@ -1,0 +1,21 @@
+﻿@model AccountDetailsServiceModel
+
+@{
+    ViewData["Title"] = $"Delete {Model.Name} account";
+}
+
+<h2 class="text-danger">Are you sure you want to delete @Model.Name account?</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>@Model.Name</strong></div>
+    <div class="panel-body">
+        <p>@Model.Description</p>
+        <p><small>@Model.Address</small></p>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
