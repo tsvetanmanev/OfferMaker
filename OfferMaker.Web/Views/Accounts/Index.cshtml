@@ -16,20 +16,19 @@
 <div class="row">
     @foreach (var account in Model)
     {
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
                     <a asp-controller="Accounts" asp-action="Details" asp-route-id="@account.Id">@account.Name</a>
                 </div>
                 <div class="panel-body">
-                    @*<img src="http://thecatapi.com/api/images/get?format=src&type=gif&guid=@(Guid.NewGuid())" class="img-responsive">*@
                     <p class="text-center">@account.Description</p>
                     @if (!String.IsNullOrEmpty(account.Address))
                     {
-                        <p class="text-center">Adrress: @account.Address</p>
+                        <p>Adrress: @account.Address</p>
                     }
-                    <p class="text-center">Account Manager: @account.ManagerName</p>
-                    <p class="text-center">@account.OpportunitiesCount Sales Opportunities</p>
+                    <p>Account Manager: @account.ManagerName</p>
+                    <p>@account.OpportunitiesCount Sales Opportunities</p>
                 </div>
             </div>
         </div>

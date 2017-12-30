@@ -53,12 +53,38 @@
 
         }
 
-        public async Task<IEnumerable<OpportunityListingServiceModel>> GetByUserIdAsync(string userId)
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var opportunity = await this.db.Opportunities.FindAsync(id);
+
+            if (opportunity == null)
+            {
+                return false;
+            }
+
+            this.db.Opportunities.Remove(opportunity);
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<IEnumerable<OpportunityListingServiceModel>> GetAllByUserIdAsync(string userId)
             => await this.db
                     .Opportunities
                     .Where(o => o.Members.Any(m => m.UserId == userId))
                     .ProjectTo<OpportunityListingServiceModel>()
                     .ToListAsync();
 
+        public async Task<OpportunityDetailsServiceModel> GetByIdAsync(int id)
+            => await this.db
+                    .Opportunities
+                    .Where(o => o.Id == id)
+                    .ProjectTo<OpportunityDetailsServiceModel>()
+                    .FirstOrDefaultAsync();
+
+        public async Task<bool> UserIsMemberOfOpportunity(string userId, int opportunityId)
+            => await this.db
+                .Opportunities
+                .AnyAsync(o => o.Id == opportunityId && o.Members.Any(uo => uo.UserId == userId));
     }
 }

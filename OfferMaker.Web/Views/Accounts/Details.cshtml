@@ -37,7 +37,7 @@
                 @foreach (var opportunity in Model.Account.Opportunities)
                 {
                     <tr>
-                        <td>@opportunity.Name</td>
+                        <td><a asp-controller="Opportunities" asp-action="Details" asp-route-id="@opportunity.Id">@opportunity.Name</a></td>
                         <td>@opportunity.CreationDate</td>
                         <td>@opportunity.Id</td>
                     </tr>

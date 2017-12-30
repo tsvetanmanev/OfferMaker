@@ -1,0 +1,63 @@
+﻿@model OpportunityDetailsServiceModel
+
+@{
+    ViewData["Title"] = $"Opportunity {Model.Name} Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>@Model.Name</strong></div>
+    <div class="panel-body">
+        <p>@Model.Description</p>
+        <p>For account: <a asp-controller="Accounts" asp-action="Details" asp-route-id="@Model.AccountId">@Model.AccountName</a></p>
+        <p id="manage-buttons">
+            <a class="btn btn-primary" asp-controller="Proposal" asp-action="Create" asp-route-accountId="@Model.Id">Add Proposal</a>
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+        </p>
+    </div>
+
+    @if (Model.Proposals != null && Model.Proposals.Count() >= 1)
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Proposal</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var proposal in Model.Proposals)
+                {
+                    <tr>
+                        <td>@proposal.Name</td>
+                        <td>@proposal.Date</td>
+                        <td>@proposal.Id</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (Model.Members != null && Model.Members.Count() >= 1)
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Team member</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var member in Model.Members)
+                {
+                    <tr>
+                        <td>@member.FirstName @member.LastName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

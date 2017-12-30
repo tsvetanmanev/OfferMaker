@@ -11,6 +11,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System;
 
     public class OpportunitiesController : Controller
     {
@@ -21,6 +22,14 @@
         {
             this.userManager = userManager;
             this.opportunities = opportunities;
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var userId = this.userManager.GetUserId(User);
+
+            return View(await this.opportunities.GetAllByUserIdAsync(userId));
         }
 
         [Authorize]
@@ -57,11 +66,58 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await this.opportunities.GetByIdAsync(id);
+
+            return this.ViewOrNotFound(model);
+        }
+
+        [Authorize(Roles = WebConstants.OpportunityMemberRole)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await this.ValidateUserIsMemberOfOpportunity(id))
+            {
+                return Unauthorized();
+            }
+
+            var model = await this.opportunities.GetByIdAsync(id);
+
+            return this.ViewOrNotFound(model);
+        }
+
+        [Authorize(Roles = WebConstants.OpportunityMemberRole)]
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!await this.ValidateUserIsMemberOfOpportunity(id))
+            {
+                return Unauthorized();
+            }
+
+            var model = await this.opportunities.GetByIdAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            var result = await this.opportunities.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            TempData.AddSuccessMessage($"Opportunity {model.Name} deleted successfully!");
+            return RedirectToAction("Details", "Accounts", new { id = model.AccountId });
+        }
+
+        private async Task<bool> ValidateUserIsMemberOfOpportunity(int opportunityId)
         {
             var userId = this.userManager.GetUserId(User);
 
-            return View(await this.opportunities.GetByUserIdAsync(userId));
+            var userIsMemberOfOpportunity = await this.opportunities.UserIsMemberOfOpportunity(userId, opportunityId);
+
+            return userIsMemberOfOpportunity;
         }
 
         private async Task<IEnumerable<SelectListItem>> GetUsersInOpportunityMemberRole()
