@@ -68,6 +68,40 @@
             return true;
         }
 
+        public async Task EditAsync(int id, string name, string description, IEnumerable<string> opportunityMembers)
+        {
+            var opportunity = await this.db.Opportunities.FirstOrDefaultAsync(o => o.Id == id);
+
+            if (opportunity == null)
+            {
+                return;
+            }
+
+            opportunity.Name = name;
+            opportunity.Description = description;
+
+            await this.db.SaveChangesAsync();
+
+
+            //TODO: Fix logic below for updating Opportunity Members
+            if (opportunityMembers != null)
+            {
+                var opportunityId = opportunity.Id;
+                foreach (var userId in opportunityMembers)
+                {
+                    var userInOpportunity = new UserOpportunity
+                    {
+                        OpportunityId = opportunityId,
+                        UserId = userId
+                    };
+
+                    this.db.Add(userInOpportunity);
+                }
+
+                await this.db.SaveChangesAsync();
+            }
+        }
+
         public async Task<IEnumerable<OpportunityListingServiceModel>> GetAllByUserIdAsync(string userId)
             => await this.db
                     .Opportunities

@@ -12,16 +12,20 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System;
+    using AutoMapper;
+    using OfferMaker.Services.Models.Opportunity;
 
     public class OpportunitiesController : Controller
     {
         private readonly UserManager<User> userManager;
         private readonly IOpportunityService opportunities;
+        private readonly IAccountService accounts;
 
-        public OpportunitiesController(UserManager<User> userManager, IOpportunityService opportunities)
+        public OpportunitiesController(UserManager<User> userManager, IOpportunityService opportunities, IAccountService accounts)
         {
             this.userManager = userManager;
             this.opportunities = opportunities;
+            this.accounts = accounts;
         }
 
         [Authorize]
@@ -35,22 +39,32 @@
         [Authorize]
         public async Task<IActionResult> Create(int accountId)
         {
-            var model = new AddOpportunityFormModel
+            if (!await this.ValidateUserIsAssignedAccountManager(accountId))
+            {
+                return Unauthorized();
+            }
+
+            var model = new OpportunityFormModel
             {
                 AccountId = accountId,
-                PotentialMembers = await GetUsersInOpportunityMemberRole()
+                PotentialMembers = await GetUsersInOpportunityMemberRoleAsync()
             };
 
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
         [HttpPost]
-        public async Task<IActionResult> Create(AddOpportunityFormModel model)
+        public async Task<IActionResult> Create(OpportunityFormModel model)
         {
+            if (!await this.ValidateUserIsAssignedAccountManager(model.AccountId))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
-                model.PotentialMembers = await GetUsersInOpportunityMemberRole();
+                model.PotentialMembers = await GetUsersInOpportunityMemberRoleAsync();
                 return View(model);
             }
 
@@ -76,7 +90,7 @@
         [Authorize(Roles = WebConstants.OpportunityMemberRole)]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!await this.ValidateUserIsMemberOfOpportunity(id))
+            if (!await this.ValidateUserIsMemberOfOpportunityAsync(id))
             {
                 return Unauthorized();
             }
@@ -90,7 +104,7 @@
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!await this.ValidateUserIsMemberOfOpportunity(id))
+            if (!await this.ValidateUserIsMemberOfOpportunityAsync(id))
             {
                 return Unauthorized();
             }
@@ -111,7 +125,61 @@
             return RedirectToAction("Details", "Accounts", new { id = model.AccountId });
         }
 
-        private async Task<bool> ValidateUserIsMemberOfOpportunity(int opportunityId)
+        [Authorize(Roles = WebConstants.OpportunityMemberRole)]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (!await this.ValidateUserIsMemberOfOpportunityAsync(id))
+            {
+                return Unauthorized();
+            }
+
+            var serviceModel = await this.opportunities.GetByIdAsync(id);
+
+            if (serviceModel == null)
+            {
+                return BadRequest();
+            }
+
+            var viewModel = Mapper.Map<OpportunityDetailsServiceModel, OpportunityFormModel>(serviceModel);
+
+            viewModel.PotentialMembers = await this.GetUsersInOpportunityMemberRoleAsync();
+
+            return this.ViewOrNotFound(viewModel);
+        }
+
+        [Authorize(Roles = WebConstants.OpportunityMemberRole)]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, OpportunityFormModel model)
+        {
+            if (!await this.ValidateUserIsAssignedAccountManager(model.AccountId))
+            {
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.PotentialMembers = await GetUsersInOpportunityMemberRoleAsync();
+                return View(model);
+            }
+
+            var serviceModel = await this.opportunities.GetByIdAsync(id);
+
+            if (serviceModel == null)
+            {
+                return BadRequest();
+            }
+
+            await this.opportunities.EditAsync(
+                id,
+                model.Name,
+                model.Description,
+                model.OportunityMembers);
+
+            TempData.AddSuccessMessage($"Opportunity {model.Name} edited successfully!");
+            return RedirectToAction(nameof(Details), routeValues: new { id = id });
+        }
+
+        private async Task<bool> ValidateUserIsMemberOfOpportunityAsync(int opportunityId)
         {
             var userId = this.userManager.GetUserId(User);
 
@@ -120,7 +188,7 @@
             return userIsMemberOfOpportunity;
         }
 
-        private async Task<IEnumerable<SelectListItem>> GetUsersInOpportunityMemberRole()
+        private async Task<IEnumerable<SelectListItem>> GetUsersInOpportunityMemberRoleAsync()
         {
             var opportunityMembers = await this.userManager.GetUsersInRoleAsync(WebConstants.OpportunityMemberRole);
 
@@ -132,6 +200,14 @@
                 });
 
             return opportunityMembersListItems;
+        }
+
+        private async Task<bool> ValidateUserIsAssignedAccountManager(int accountid)
+        {
+            var userId = this.userManager.GetUserId(User);
+            var userIsAssignedAccountManager = await this.accounts.UserIsAssignedAccountManager(userId, accountid);
+
+            return userIsAssignedAccountManager;
         }
     }
 }

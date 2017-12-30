@@ -1,12 +1,13 @@
 ﻿namespace OfferMaker.Web.Models
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using OfferMaker.Common.Mapping;
     using OfferMaker.Data;
-    using System;
+    using OfferMaker.Services.Models.Opportunity;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class AddOpportunityFormModel
+    public class OpportunityFormModel : IMapFrom<OpportunityDetailsServiceModel>
     {
         [Required]
         [MinLength(DataConstants.EntityTitleMinLenght)]

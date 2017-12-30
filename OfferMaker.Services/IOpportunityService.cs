@@ -15,5 +15,7 @@
         Task<bool> DeleteAsync(int id);
 
         Task<bool> UserIsMemberOfOpportunity(string userId, int opportunityId);
+
+        Task EditAsync(int id, string name, string description, IEnumerable<string> oportunityMembers);
     }
 }

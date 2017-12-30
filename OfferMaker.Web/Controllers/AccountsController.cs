@@ -137,6 +137,11 @@
                 return Unauthorized();
             }
 
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var serviceModel = await this.accounts.GetByIdAsync(id);
 
             if (serviceModel == null)
