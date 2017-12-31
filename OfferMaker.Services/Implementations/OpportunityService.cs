@@ -80,18 +80,17 @@
             opportunity.Name = name;
             opportunity.Description = description;
 
+            //TODO: Fix logic below for updating Opportunity Members
+            this.db.UserOpportunities.RemoveRange(this.db.UserOpportunities.Where(uo => uo.OpportunityId == id));
             await this.db.SaveChangesAsync();
 
-
-            //TODO: Fix logic below for updating Opportunity Members
             if (opportunityMembers != null)
             {
-                var opportunityId = opportunity.Id;
                 foreach (var userId in opportunityMembers)
                 {
                     var userInOpportunity = new UserOpportunity
                     {
-                        OpportunityId = opportunityId,
+                        OpportunityId = id,
                         UserId = userId
                     };
 
@@ -100,6 +99,8 @@
 
                 await this.db.SaveChangesAsync();
             }
+
+            
         }
 
         public async Task<IEnumerable<OpportunityListingServiceModel>> GetAllByUserIdAsync(string userId)
@@ -118,7 +119,7 @@
 
         public async Task<bool> UserIsMemberOfOpportunity(string userId, int opportunityId)
             => await this.db
-                .Opportunities
-                .AnyAsync(o => o.Id == opportunityId && o.Members.Any(uo => uo.UserId == userId));
+                .UserOpportunities
+                .AnyAsync(uo => uo.OpportunityId == opportunityId && uo.UserId == userId);
     }
 }

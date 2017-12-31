@@ -14,6 +14,7 @@
     using System;
     using AutoMapper;
     using OfferMaker.Services.Models.Opportunity;
+    using OfferMaker.Web.Models.Opportunity;
 
     public class OpportunitiesController : Controller
     {
@@ -82,9 +83,21 @@
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await this.opportunities.GetByIdAsync(id);
+            var servicesModel = await this.opportunities.GetByIdAsync(id);
+            var userIsMemberOfOpportunity = await this.ValidateUserIsMemberOfOpportunityAsync(id);
 
-            return this.ViewOrNotFound(model);
+            if (servicesModel == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new OpportunityDetailsViewModel
+            {
+                Opportunity = servicesModel,
+                UserIsMemberOfOpportunity = userIsMemberOfOpportunity
+            };
+
+            return this.ViewOrNotFound(viewModel);
         }
 
         [Authorize(Roles = WebConstants.OpportunityMemberRole)]
@@ -151,7 +164,7 @@
         [HttpPost]
         public async Task<IActionResult> Edit(int id, OpportunityFormModel model)
         {
-            if (!await this.ValidateUserIsAssignedAccountManager(model.AccountId))
+            if (!await this.ValidateUserIsMemberOfOpportunityAsync(id))
             {
                 return Unauthorized();
             }

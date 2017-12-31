@@ -19,6 +19,8 @@
 
         public DbSet<Proposal> Offers { get; set; }
 
+        public DbSet<UserOpportunity> UserOpportunities { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder

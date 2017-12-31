@@ -1,4 +1,4 @@
-﻿namespace OfferMaker.Web.Models
+﻿namespace OfferMaker.Web.Models.Opportunity
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OfferMaker.Common.Mapping;
