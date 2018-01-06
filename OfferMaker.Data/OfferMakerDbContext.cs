@@ -17,7 +17,7 @@
 
         public DbSet<Opportunity> Opportunities { get; set; }
 
-        public DbSet<Proposal> Offers { get; set; }
+        public DbSet<Proposal> Proposals { get; set; }
 
         public DbSet<UserOpportunity> UserOpportunities { get; set; }
 

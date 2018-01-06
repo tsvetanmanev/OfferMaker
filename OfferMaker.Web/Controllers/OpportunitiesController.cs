@@ -1,20 +1,18 @@
 ﻿namespace OfferMaker.Web.Controllers
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OfferMaker.Data.Models;
     using OfferMaker.Services;
+    using OfferMaker.Services.Models.Opportunity;
     using OfferMaker.Web.Infrastructure.Extensions;
-    using OfferMaker.Web.Models;
+    using OfferMaker.Web.Models.Opportunity;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System;
-    using AutoMapper;
-    using OfferMaker.Services.Models.Opportunity;
-    using OfferMaker.Web.Models.Opportunity;
 
     public class OpportunitiesController : Controller
     {

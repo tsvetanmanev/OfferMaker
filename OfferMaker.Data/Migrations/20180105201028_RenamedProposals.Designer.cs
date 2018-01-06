@@ -11,9 +11,10 @@ using System;
 namespace OfferMaker.Data.Migrations
 {
     [DbContext(typeof(OfferMakerDbContext))]
-    partial class OfferMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180105201028_RenamedProposals")]
+    partial class RenamedProposals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +183,7 @@ namespace OfferMaker.Data.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("FileId");
+                    b.Property<int>("FileId");
 
                     b.Property<double>("Margin");
 

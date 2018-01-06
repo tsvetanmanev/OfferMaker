@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using AutoMapper;
+    using OfferMaker.Services.Models.Proposal;
 
     public class OpportunityDetailsServiceModel : IMapFrom<Opportunity>, IHaveCustomMapping
     {

@@ -1,0 +1,48 @@
+﻿@model ProposalFormModel
+
+@{
+    ViewData["Title"] = "Create proposal";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Value"></label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input asp-for="Value" class="form-control" />
+                </div>
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Margin"></label>
+                <div class="input-group">
+                    <input asp-for="Margin" class="form-control" />
+                    <span class="input-group-addon">%</span>
+                </div>
+                <span asp-validation-for="Margin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File">Upload PDF file</label>
+                <input asp-for="File" accept=".pdf" class="form-control" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="OpportunityId" />
+            <button type="submit" class="btn btn-success">Save Proposal</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
