@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ProposalListingServiceModel>
+
+@{
+    ViewData["Title"] = "Proposals";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Proposal</th>
+            <th>Date</th>
+            <th>Value</th>
+            <th>Margin</th>
+            <th>Summary</th>
+            <th>Approval status</th>
+            @if (User.IsInRole(WebConstants.AccountManagerRole))
+            {
+                <th></th>
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var proposal in Model)
+        {
+            <tr>
+                <td>@proposal.Name</td>
+                <td>@proposal.Date</td>
+                <td>@proposal.Value.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <td>@proposal.Margin.ToString("0.0%")</td>
+                <td>
+                    @if (proposal.FileExists)
+                    {
+                        <a class="btn btn-primary" asp-action="DownloadFile" asp-controller="Proposals" asp-route-proposalId="@proposal.Id">Download</a>
+                    }
+                </td>
+                <td>
+                    @proposal.Status
+                </td>
+                @if (User.IsInRole(WebConstants.AccountManagerRole))
+                {
+                    @if (@proposal.Status == ApprovalStatus.Pending)
+                    {
+                        <td>
+                            <form method="post" asp-action="Approve" style="float:left" asp-route-proposalId="@proposal.Id">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" asp-action="Reject" asp-route-proposalId="@proposal.Id">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

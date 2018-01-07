@@ -34,6 +34,11 @@
         {
             var userId = this.userManager.GetUserId(User);
 
+            if (User.IsInRole(WebConstants.AccountManagerRole))
+            {
+                return View(await this.proposals.GetAllByManagerAsync(userId));
+            }
+
             return View(await this.proposals.GetAllByUserAsync(userId));
         }
 
@@ -106,7 +111,59 @@
             else
             {
                 return Unauthorized();
-            }            
+            }
+        }
+
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
+        [HttpPost]
+        public async Task<IActionResult> Approve(int proposalId)
+        {
+            var proposal = await this.proposals.GetByIdAsync(proposalId);
+            if (proposal == null)
+            {
+                return BadRequest();
+            }
+
+            var userId = this.userManager.GetUserId(User);
+            if (!await this.accounts.UserIsAssignedAccountManager(userId, proposal.AccountId))
+            {
+                Unauthorized();
+            }
+
+            var result = await this.proposals.ApproveAsync(proposalId);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            TempData.AddSuccessMessage($"Proposal {proposal.Name} was approved successfully!");
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = WebConstants.AccountManagerRole)]
+        [HttpPost]
+        public async Task<IActionResult> Reject(int proposalId)
+        {
+            var proposal = await this.proposals.GetByIdAsync(proposalId);
+            if (proposal == null)
+            {
+                return BadRequest();
+            }
+
+            var userId = this.userManager.GetUserId(User);
+            if (!await this.accounts.UserIsAssignedAccountManager(userId, proposal.AccountId))
+            {
+                Unauthorized();
+            }
+
+            var result = await this.proposals.RejectAsync(proposalId);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            TempData.AddSuccessMessage($"Proposal {proposal.Name} was rejected successfully!");
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ValidateUserIsMemberOfOpportunityAsync(int opportunityId)

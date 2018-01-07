@@ -17,6 +17,8 @@
 
         public double Margin { get; set; }
 
+        public ApprovalStatus Status { get; set; }
+
         public bool FileExists { get; set; }
 
         public void ConfigureMapping(Profile mapper)

@@ -25,5 +25,8 @@
         public int OpportunityId { get; set; }
 
         public Opportunity Opportunity { get; set; }
+
+        [Required]
+        public ApprovalStatus Status { get; set; }
     }
 }

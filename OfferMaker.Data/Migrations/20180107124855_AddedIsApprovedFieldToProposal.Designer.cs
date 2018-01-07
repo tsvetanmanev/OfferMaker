@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using OfferMaker.Data;
-using OfferMaker.Data.Models;
 using System;
 
 namespace OfferMaker.Data.Migrations
 {
     [DbContext(typeof(OfferMakerDbContext))]
-    partial class OfferMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180107124855_AddedIsApprovedFieldToProposal")]
+    partial class AddedIsApprovedFieldToProposal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,6 +185,10 @@ namespace OfferMaker.Data.Migrations
 
                     b.Property<string>("FileId");
 
+                    b.Property<bool>("IsApproved")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
                     b.Property<double>("Margin");
 
                     b.Property<string>("Name")
@@ -192,10 +196,6 @@ namespace OfferMaker.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<int>("OpportunityId");
-
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(0);
 
                     b.Property<decimal>("Value");
 

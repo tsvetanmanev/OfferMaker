@@ -44,11 +44,19 @@
             await this.db.AddAsync(proposal);
             await this.db.SaveChangesAsync();
         }
-
+        
         public async Task<IEnumerable<ProposalListingServiceModel>> GetAllByUserAsync(string userId)
             => await this.db
                         .Proposals
                         .Where(p => p.Opportunity.Members.Any(uo => uo.UserId == userId))
+                        .ProjectTo<ProposalListingServiceModel>()
+                        .ToListAsync();
+
+
+        public async Task<IEnumerable<ProposalListingServiceModel>> GetAllByManagerAsync(string userId)
+            => await this.db
+                        .Proposals
+                        .Where(p => p.Opportunity.Account.ManagerId == userId)
                         .ProjectTo<ProposalListingServiceModel>()
                         .ToListAsync();
 
@@ -77,6 +85,48 @@
             var file = await googleDriveService.DownloadFileAsync(fileId);
 
             return file;
+        }
+
+        public async Task<bool> ApproveAsync(int proposalId)
+        {
+            var proposal = await this.db.FindAsync<Proposal>(proposalId);
+
+            if (proposal == null)
+            {
+                return false;
+            }
+
+            if (proposal.Status != ApprovalStatus.Pending)
+            {
+                return false;
+            }
+
+            proposal.Status = ApprovalStatus.Approved;
+
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RejectAsync(int proposalId)
+        {
+            var proposal = await this.db.FindAsync<Proposal>(proposalId);
+
+            if (proposal == null)
+            {
+                return false;
+            }
+
+            if (proposal.Status != ApprovalStatus.Pending)
+            {
+                return false;
+            }
+
+            proposal.Status = ApprovalStatus.Rejected;
+
+            await this.db.SaveChangesAsync();
+
+            return true;
         }
     }
 }

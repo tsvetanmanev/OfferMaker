@@ -24,6 +24,11 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
+                .Entity<Proposal>()
+                .Property(p => p.Status)
+                .HasDefaultValue(ApprovalStatus.Pending);
+
+            builder
                 .Entity<UserOpportunity>()
                 .HasKey(uo => new { uo.UserId, uo.OpportunityId });
 

@@ -51,6 +51,7 @@
                     <th>Value</th>
                     <th>Margin</th>
                     <th>Summary</th>
+                    <th>Approval status</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +67,9 @@
                             {
                                 <a class="btn btn-primary" asp-action="DownloadFile" asp-controller="Proposals" asp-route-proposalId="@proposal.Id">Download</a>
                             }
+                        </td>
+                        <td>
+                            @proposal.Status
                         </td>
                     </tr>
                 }
