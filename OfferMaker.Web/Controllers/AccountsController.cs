@@ -8,7 +8,6 @@
     using OfferMaker.Services;
     using OfferMaker.Services.Models.Account;
     using OfferMaker.Web.Infrastructure.Extensions;
-    using OfferMaker.Web.Models;
     using OfferMaker.Web.Models.Account;
     using System.Threading.Tasks;
 
@@ -31,7 +30,7 @@
 
         [Authorize(Roles = WebConstants.AccountManagerRole)]
         public IActionResult Create()
-            => View();
+            => View(new AccountFormModel());
 
         [Authorize(Roles = WebConstants.AccountManagerRole)]
         [HttpPost]
